@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -265,7 +266,7 @@ public class VltUtils {
     }
 
     public static VaultPackage createPackage(PackageManager packageManager, Session session, ExportOptions options, File tempFolder) throws IOException, RepositoryException {
-        File file = File.createTempFile("distr-vault-create-" + System.nanoTime(), ".zip", tempFolder);
+        File file = Files.createTempFile(tempFolder.toPath(), "distr-vault-create-" + System.nanoTime(), ".zip").toFile();
 
         try {
             return packageManager.assemble(session, options, file);
@@ -276,7 +277,7 @@ public class VltUtils {
     }
 
     public static VaultPackage readPackage(PackageManager packageManager, InputStream stream, File tempFolder) throws IOException {
-        File file = File.createTempFile("distr-vault-read-" + System.nanoTime(), ".zip", tempFolder);
+        File file = Files.createTempFile(tempFolder.toPath(), "distr-vault-read-" + System.nanoTime(), ".zip").toFile();
         OutputStream out = FileUtils.openOutputStream(file);
         try {
             IOUtils.copy(stream, out);

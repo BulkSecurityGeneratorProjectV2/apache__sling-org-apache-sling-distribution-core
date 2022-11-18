@@ -21,6 +21,7 @@ package org.apache.sling.distribution.util.impl;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import org.junit.Test;
 
@@ -66,7 +67,7 @@ public class ByteBufferBackedInputStreamTest {
     }
 
     private File write(byte[] data) throws IOException {
-        File file = createTempFile("output", format(".%s.bin", currentTimeMillis()));
+        File file = Files.createTempFile("output", format(".%s.bin", currentTimeMillis())).toFile();
         FileOutputStream fos = new FileOutputStream(file);
         try {
             fos.write(data);

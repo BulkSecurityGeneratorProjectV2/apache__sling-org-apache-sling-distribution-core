@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
 
 /**
  * {@link OutputStream} implementation which writes into a {@code byte[]} until a certain threshold is
@@ -91,7 +92,7 @@ public class FileBackedMemoryOutputStream extends OutputStream {
             memory.put((byte) (b & 0xff));
         } else {
             if (out == null) {
-                file = createTempFile(fileName, fileExtension, tempDirectory);
+                file = Files.createTempFile(tempDirectory.toPath(), fileName, fileExtension).toFile();
                 out = new FileOutputStream(file);
             }
 
@@ -105,7 +106,7 @@ public class FileBackedMemoryOutputStream extends OutputStream {
             int memLen = Math.min(memory.remaining(), len);
             memory.put(b, off, memLen);
             if (len > memLen) {
-                file = createTempFile(fileName, fileExtension, tempDirectory);
+                file = Files.createTempFile(tempDirectory.toPath(), fileName, fileExtension).toFile();
                 out = new FileOutputStream(file);
                 out.write(b, off + memLen, len - memLen);
             }

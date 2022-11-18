@@ -26,6 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.security.DigestOutputStream;
 import java.util.HashMap;
 import java.util.List;
@@ -90,7 +91,7 @@ public class FileDistributionPackageBuilder extends AbstractDistributionPackageB
         final File file;
 
         try {
-            file = File.createTempFile("distrpck-create-" + randomUUID(), "." + getType(), tempDirectory);
+            file = Files.createTempFile(tempDirectory.toPath(), "distrpck-create-" + randomUUID(), "." + getType()).toFile();
             if (digestAlgorithm != null) {
                 outputStream = openDigestOutputStream(new FileOutputStream(file), digestAlgorithm);
             } else {
@@ -137,7 +138,7 @@ public class FileDistributionPackageBuilder extends AbstractDistributionPackageB
                 name = "distrpck-read-" + System.nanoTime();
                 log.debug("generating a new id {}", name);
             }
-            file = File.createTempFile(name, "." + getType(), tempDirectory);
+            file = Files.createTempFile(tempDirectory.toPath(), name, "." + getType()).toFile();
             outputStream = openDigestOutputStream(new FileOutputStream(file), digestAlgorithm);
 
             IOUtils.copy(stream, outputStream);
